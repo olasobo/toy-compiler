@@ -1,0 +1,5 @@
+program Null {
+
+	// The program that does nothing.
+
+}

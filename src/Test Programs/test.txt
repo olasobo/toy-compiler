@@ -1,0 +1,23 @@
+
+Hello_World  1_127	'c' 	 "Hello"               // Identifiers & literals
+'\\'  '\''  '\n'  ""  " \\ "  " \" \' "            // Character & string literals
+program if else while return void int char boolean // Reserved words
+returns If INT character X23                       // Identifiers
+true false in out                                  // Predefined identifiers
+{} () [] .,;:                                      // Bracketing & punctuation
++ ++ - -- * / % & && | || ^ ! < > <= >= == !=      // Operators
+= += -= *= /= %= &= |= ^=                          // Assignment operators
+
++++---&&&|||=== ++++----&&&&||||====               // ++ + -- - && & || | == = ++ ++ -- -- && && || || == ==
++== ++== ++= +++= +== + + =                        // += =  ++ ==  ++ =  ++ +=  += =  + + =
+
+2B = X_ + _Y - 1__000 * 2_                         // Identifier & numeric literal errors
+''   'abc'  '\.'  '                                // Character literal errors
+"\$ \"                                             // String literal errors
+`~@#$? _                                           // Errors
+me@priory.com                                      // Id Err Id Dot Id
+
+count[i++]*=2;
+count[ i++ ] *= 2;
+
+// Comment at end of file

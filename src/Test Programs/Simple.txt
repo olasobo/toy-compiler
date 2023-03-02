@@ -1,0 +1,8 @@
+program Simple {
+
+	// A simple program to add two numbers.
+
+    int x = 5;
+	int y = 7;
+	int z = x + y;
+}
