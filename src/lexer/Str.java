@@ -1,3 +1,5 @@
+package lexer;
+
 public class Str extends Value {
     static StringBuilder current = new StringBuilder();
 

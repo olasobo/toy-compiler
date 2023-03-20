@@ -42,7 +42,7 @@ public class Symbols {
             String operand = patches.get(address);
             Assembler.dot(Memory.readWord(address));
             try {
-                int value = Parser.parse(operand);
+                int value = parser.parse(operand);
                 Memory.writeWord(address, value);
             } catch (Assembler.AsmException e) {
                 System.err.println("Unresolved sybols: " + operand);

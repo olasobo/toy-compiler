@@ -100,7 +100,7 @@ public class Assembler {
     }
 
     private static int getValue(String operand) {
-        return Parser.parse(operand);
+        return parser.parse(operand);
     }
 
     private static int lo(int value) {
