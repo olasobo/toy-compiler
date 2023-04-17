@@ -10,4 +10,10 @@ public class Program extends Node {
         this.identifier = identifier;
         this.block = block;
     }
+
+    @Override
+    public String treeString() {
+        String result = "PROGRAM " + this.identifier.getName() + "\n";
+        return result + this.block.indentedTree(1);
+    }
 }

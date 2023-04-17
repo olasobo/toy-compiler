@@ -22,4 +22,13 @@ public class Type extends Node {
         this.length = null;
         this.array = array;
     }
+
+    @Override
+    public String treeString() {
+        return "TYPE " + this.type + "\n";
+    }
+
+    public Token getType() {
+        return this.type;
+    }
 }

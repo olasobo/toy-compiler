@@ -1,5 +1,4 @@
 package parser;
-import lexer.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +19,15 @@ public class Arguments extends Node {
 
     public void add(Node node) {
         this.arguments.add(node);
+    }
+
+    @Override
+    public String treeString() {
+        String result = "ARGUMENTS\n";
+        for (Node argument : this.arguments) {
+            result += argument.indentedTree(1) + "\n";
+        }
+
+        return result;
     }
 }

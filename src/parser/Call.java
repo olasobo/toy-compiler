@@ -1,7 +1,6 @@
 package parser;
-import lexer.*;
 
-public class Call extends Node {
+public class Call extends Statement {
     Variable method;
     Arguments arguments;
 
@@ -9,5 +8,13 @@ public class Call extends Node {
         super(method.token);
         this.method = method;
         this.arguments = arguments;
+    }
+
+    @Override
+    public String treeString() {
+        String result = "CALL " + method.getName() + "\n";
+        result += (this.arguments == null) ? "" : this.arguments.indentedTree(1);
+
+        return result;
     }
 }

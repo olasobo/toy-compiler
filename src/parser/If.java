@@ -12,4 +12,14 @@ public class If extends Statement {
         this.primary = primary;
         this.secondary = secondary;
     }
+
+    @Override
+    public String treeString() {
+        String result = "IF\n";
+        result += this.condition.indentedTree(1);
+        result += this.primary.indentedTree(2) + "\n";
+        result += (this.secondary == null) ? "" : this.secondary.indentedTree(2);
+
+        return result;
+    }
 }

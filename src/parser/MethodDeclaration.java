@@ -14,4 +14,13 @@ public class MethodDeclaration extends Statement {
         this.parameters = parameters;
         this.block = block;
     }
+
+    @Override
+    public String treeString() {
+        String result = "METHOD DECLARATION " + this.type.getType() + " " + identifier.getName() + "\n";
+        result += this.parameters.indentedTree(1) + "\n";
+        result += this.block.indentedTree(1);
+
+        return result;
+    }
 }

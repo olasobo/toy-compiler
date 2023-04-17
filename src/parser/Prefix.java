@@ -11,6 +11,12 @@ public class Prefix extends Unary {
         return token.kind().name() + " " + child;
     }
 
+    @Override
+    public String treeString() {
+        String result = "PREFIX " + this.token.kind() + "\n";
+        return result + this.child.indentedTree(1);
+    }
+
     public static class Increment extends Prefix {
         public Increment(Token token, Node child) {
             super(Symbol.PLUS_PLUS, token, child);

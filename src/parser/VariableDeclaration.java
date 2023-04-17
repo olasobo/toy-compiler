@@ -10,4 +10,9 @@ public class VariableDeclaration extends Statement {
         this.type = type;
         this.identifier = identifier;
     }
+
+    @Override
+    public String treeString() {
+        return "VARIABLE DECLARATION " + this.type.getType() + " " + identifier.getName() + "\n";
+    }
 }

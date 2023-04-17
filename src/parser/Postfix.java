@@ -11,6 +11,12 @@ public class Postfix extends Unary {
         return child.toString() + " " + token.kind();
     }
 
+    @Override
+    public String treeString() {
+        String result = "POSTFIX " + this.token.kind() + "\n";
+        return result + this.child.indentedTree(1);
+    }
+
     public static class Increment extends Postfix {
         public Increment(Token token, Node child) {
             super(Symbol.PLUS_PLUS, token, child);

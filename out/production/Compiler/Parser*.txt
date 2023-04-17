@@ -1,16 +1,16 @@
 import java.util.ArrayList;
 
-public class Parser {
-    private Lexer lexer;
+public class parser {
+    private lexer lexer;
     private Token current;
 
-    public Parser() {
-        this.lexer = new Lexer();
+    public parser() {
+        this.lexer = new lexer();
         this.current = (lexer.hasNextToken()) ? lexer.nextToken() : new Token(1, 1, Symbol.END);
     }
 
-    public Parser(String filename) {
-        this.lexer = new Lexer(filename);
+    public parser(String filename) {
+        this.lexer = new lexer(filename);
         this.current = (lexer.hasNextToken()) ? lexer.nextToken() : new Token(1, 1, Symbol.END);
     }
 
@@ -27,7 +27,7 @@ public class Parser {
     public enum Constructs {
         PROGRAM {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Token program = p.advance(Keyword.PROGRAM);
                 Identifier id = (Identifier) p.advance(Value.Type.IDENTIFIER);
                 Node block = BLOCK.parse(p);
@@ -36,7 +36,7 @@ public class Parser {
         },
         BLOCK {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 p.advance(Symbol.LEFT_BRACE);
                 Node statements = STATEMENTS.parse(p);
                 p.advance(Symbol.RIGHT_BRACE);
@@ -45,7 +45,7 @@ public class Parser {
         },
         STATEMENTS {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Statement statement = STATEMENT.parse(p);
                 Statement last = statement;
                 Statement next = STATEMENT.check(p);
@@ -59,7 +59,7 @@ public class Parser {
         },
         STATEMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Constructs[] statementTypes = new Constructs[]{DECLARATION, ASSIGNMENT, IF_STATEMENT, WHILE_STATEMENT, RETURN_STATEMENT, CALL_STATEMENT, BLOCK};
                 Node statement;
                 for (Constructs construct : statementTypes) {
@@ -71,7 +71,7 @@ public class Parser {
         },
         ASSIGNMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Variable variable = VARIABLE.parse(p);
                 Token operator = p.assignOperator(true);
                 Node expression = EXPRESSION.parse(p);
@@ -81,7 +81,7 @@ public class Parser {
         },
         CALL_STATEMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node call = CALL.parse(p);
                 p.advance(Symbol.SEMICOLON);
                 return call;
@@ -89,7 +89,7 @@ public class Parser {
         },
         CALL {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Variable name = NAME.parse(p);
                 p.advance(Symbol.LEFT_PARENTHESIS);
                 Arguments arguments = (Arguments) ARGUMENTS.check(p);
@@ -99,7 +99,7 @@ public class Parser {
         },
         ARGUMENTS {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Arguments result = new Arguments(EXPRESSION.parse(p));
                 while (p.check(Symbol.COMMA) != null) {
                     result.add(EXPRESSION.parse(p));
@@ -109,7 +109,7 @@ public class Parser {
         },
         IF_STATEMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
 //                Node matched = MATCHED_STATEMENT.check(p);
 //                if (matched != null) return matched;
 //
@@ -134,7 +134,7 @@ public class Parser {
         },
 //        MATCHED_STATEMENT {
 //            @Override
-//            protected Node parse(Parser p) {
+//            protected Node parse(parser p) {
 //                Node other = OTHER_STATEMENT.check(p);
 //                if (other != null) return other;
 //
@@ -156,19 +156,19 @@ public class Parser {
 //        },
 //        OPEN_STATEMENT {
 //            @Override
-//            protected Node parse(Parser p) {
+//            protected Node parse(parser p) {
 //                return null;
 //            }
 //        },
 //        OTHER_STATEMENT {
 //            @Override
-//            protected Node parse(Parser p) {
+//            protected Node parse(parser p) {
 //                return null;
 //            }
 //        },
         WHILE_STATEMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 p.advance(Keyword.WHILE);
                 p.advance(Symbol.LEFT_PARENTHESIS);
                 Node condition = BOOLEAN_EXPRESSION.parse(p);
@@ -180,7 +180,7 @@ public class Parser {
         },
         RETURN_STATEMENT {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 p.advance(Keyword.RETURN);
                 Node expression = EXPRESSION.check(p);
                 p.advance(Symbol.SEMICOLON);
@@ -190,7 +190,7 @@ public class Parser {
         },
         DECLARATION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Constructs[] declarationTypes = new Constructs[]{VARIABLE_DECLARATION, METHOD_DECLARATION};
                 Node declaration;
                 for (Constructs construct : declarationTypes) {
@@ -205,7 +205,7 @@ public class Parser {
         },
         VARIABLE_DECLARATION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node type = VARIABLE_TYPE.parse(p);
                 Identifier identifier = (Identifier) p.advance(Value.Type.IDENTIFIER);
 
@@ -222,7 +222,7 @@ public class Parser {
         },
         METHOD_DECLARATION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Token type = p.scalarType(true);
                 Identifier identifier = (Identifier) p.advance(Value.Type.IDENTIFIER);
                 p.advance(Symbol.LEFT_PARENTHESIS);
@@ -235,7 +235,7 @@ public class Parser {
         },
         PARAMETERS {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Parameters result = new Parameters(PARAMETER.parse(p));
                 while (p.check(Symbol.COMMA) != null) {
                     result.add(PARAMETER.parse(p));
@@ -245,7 +245,7 @@ public class Parser {
         },
         PARAMETER {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node type = PARAMETER_TYPE.parse(p);
                 Identifier identifier = (Identifier) p.advance(Value.Type.IDENTIFIER);
                 return new Parameter(type, identifier);
@@ -253,7 +253,7 @@ public class Parser {
         },
         VARIABLE_TYPE {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Token type = p.scalarType(true);
                 if (p.check(Symbol.LEFT_BRACKET) != null) {
                     Node constant = CONSTANT_EXPRESSION.parse(p);
@@ -265,7 +265,7 @@ public class Parser {
         },
         PARAMETER_TYPE {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Token type = p.scalarType(true);
                 if (p.check(Symbol.LEFT_BRACKET) != null) {
                     p.advance(Symbol.RIGHT_BRACKET);
@@ -276,19 +276,19 @@ public class Parser {
         },
         BOOLEAN_EXPRESSION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 return EXPRESSION.parse(p);
             }
         },
         CONSTANT_EXPRESSION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 return EXPRESSION.parse(p);
             }
         },
         EXPRESSION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node result = DISJUNCTION.parse(p);
                 Token operator = p.check(Symbol.EQUAL);
                 while (operator != null) {
@@ -300,7 +300,7 @@ public class Parser {
         },
         DISJUNCTION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node result = CONJUNCTION.parse(p);
                 Token operator = p.orOperator(false);
                 while (operator != null) {
@@ -312,7 +312,7 @@ public class Parser {
         },
         CONJUNCTION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node result = RELATION.parse(p);
                 Token operator = p.andOperator(false);
                 while (operator != null) {
@@ -324,7 +324,7 @@ public class Parser {
         },
         RELATION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node result = SIMPLE_EXPRESSION.parse(p);
                 Token operator = p.compareOperator(false);
                 while (operator != null) {
@@ -336,7 +336,7 @@ public class Parser {
         },
         SIMPLE_EXPRESSION {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Token sign = p.sign(false);
                 Node result = TERM.parse(p);
                 Token operator = p.addOperator(false);
@@ -349,7 +349,7 @@ public class Parser {
         },
         TERM {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node result = FACTOR.parse(p);
                 Token operator = p.multiplyOperator(false);
                 while (operator != null) {
@@ -361,7 +361,7 @@ public class Parser {
         },
         FACTOR {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Node primary = PRIMARY.parse(p);
                 if (primary != null) return primary;
 
@@ -393,7 +393,7 @@ public class Parser {
         },
         FACTOR_INDEX {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 p.advance(Symbol.LEFT_BRACKET);
                 Node result = EXPRESSION.parse(p);
                 p.advance(Symbol.RIGHT_BRACKET);
@@ -403,7 +403,7 @@ public class Parser {
         },
         FACTOR_ARGUMENTS {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 p.advance(Symbol.LEFT_PARENTHESIS);
                 Arguments result = (Arguments) ARGUMENTS.parse(p);
                 p.advance(Symbol.RIGHT_PARENTHESIS);
@@ -412,7 +412,7 @@ public class Parser {
         },
         PRIMARY {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Constructs[] primaryTypes = new Constructs[]{CALL, VARIABLE};
                 Node primary;
                 for (Constructs construct : primaryTypes) {
@@ -434,7 +434,7 @@ public class Parser {
         },
         VARIABLE {
             @Override
-            protected Node parse(Parser p) {
+            protected Node parse(parser p) {
                 Variable variable = (Variable) NAME.parse(p);
                 if (p.check(Symbol.LEFT_BRACKET) != null) {
                     Node index = EXPRESSION.parse(p);
@@ -445,7 +445,7 @@ public class Parser {
             }
         },
         NAME {
-            protected Variable parse(Parser p) {
+            protected Variable parse(parser p) {
                 Identifier name = (Identifier) p.advance(Value.Type.IDENTIFIER);
                 ArrayList<Identifier> path = new ArrayList<>(3);
                 while (p.check(Symbol.PERIOD) != null) {
@@ -456,8 +456,8 @@ public class Parser {
             }
         };
 
-        protected abstract Node parse(Parser p);
-        protected Node check(Parser p) {
+        protected abstract Node parse(parser p);
+        protected Node check(parser p) {
             try {
                 return this.parse(p);
             } catch (ExpectingException e) {
@@ -786,8 +786,8 @@ public class Parser {
     }
 
     public static void main(String[] args) {
-        //Parser parser = new Parser();
-        Parser parser = new Parser(args[0]);
+        //parser parser = new parser();
+        parser parser = new parser(args[0]);
         do {
             Node node = parser.expression(true);
             System.out.println(node.token);

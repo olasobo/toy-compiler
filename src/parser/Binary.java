@@ -15,6 +15,15 @@ public abstract class Binary extends Node {
     }
 
     @Override
+    public String treeString() {
+        String result = this.token.kind() + " BINARY\n";
+        result += left.indentedTree(1) + "\n";
+        result += right.indentedTree(1);
+
+        return result;
+    }
+
+    @Override
     public String toString() {
         return left.toString() + " " + token.kind() + " " + right.toString();
     }

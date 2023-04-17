@@ -1,13 +1,14 @@
 package lexer;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Lexer {
     private Scanner scanner;
+    private String filename;
     //private ArrayList<String> previous = new ArrayList<>();
     private String current;
 
@@ -31,6 +32,17 @@ public class Lexer {
 
     // PUBLIC METHODS
 
+    public static void main(String[] args) {
+        System.out.println(args[0]);
+        Lexer lexer = new Lexer(args[0]);
+        while (lexer.hasNextToken()) {
+            System.out.println(lexer.nextToken());
+
+            System.out.println(lexer.lineProgression);
+            System.out.println();
+        }
+    }
+
     public Lexer() {
         this.scanner = new Scanner(System.in);
         //this.previous = new ArrayList<>();
@@ -40,7 +52,10 @@ public class Lexer {
 
     public Lexer(String filename) {
         try {
-            this.scanner = new Scanner(new File(filename));
+            File file = new File(filename);
+//            System.out.println(file.exists());
+            this.scanner = new Scanner(file);
+            this.filename = filename;
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Invalid filename");
         }
@@ -57,6 +72,10 @@ public class Lexer {
 //        this.line = line;
 //        this.column = column;
 //    }
+
+    public String getFilename() {
+        return (this.filename == null) ? "no filename" : this.filename;
+    }
 
     public Token nextToken() {
         this.resetValues();
@@ -75,16 +94,6 @@ public class Lexer {
 
     public boolean hasNextToken() {
         return !this.end;
-    }
-
-    public static void main(String[] args) {
-        Lexer lexer = new Lexer(args[0]);
-        while (lexer.hasNextToken()) {
-            System.out.println(lexer.nextToken());
-
-            System.out.println(lexer.lineProgression);
-            System.out.println();
-        }
     }
 
 
@@ -139,7 +148,7 @@ public class Lexer {
         this.resetValues();
 
         this.addLine("new line");
-        System.out.println("comment handled");
+//        System.out.println("comment handled");
 
         return true;
     }
@@ -150,15 +159,9 @@ public class Lexer {
 
         try {
             do {
-                if (this.line >= this.previous.size()-1+START_LINE) {
-                    if (this.current != null) this.previous.add(this.current);
-                    this.current = scanner.nextLine();
-                } else {
-                    this.current = this.previous.get(this.line-START_LINE+1);
-                }
-
+                this.current = scanner.nextLine();
                 this.line++;
-            } while (this.current.equals(""));
+            } while (this.current.equals("") || this.current.split(" ").length == 0);
         } catch (NoSuchElementException e) { // end of file
             this.end = true;
         }
@@ -180,7 +183,7 @@ public class Lexer {
 
         // reached end of the line
         if (this.column > current.length()) {
-            System.out.println("new line");
+//            System.out.println("new line");
             this.nextLine();
         }
 

@@ -7,4 +7,9 @@ public class Return extends Statement {
         super(token);
         this.expression = expression;
     }
+
+    @Override
+    public String treeString() {
+        return "RETURN\n" + this.expression.indentedTree(1);
+    }
 }

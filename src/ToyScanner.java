@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import lexer.*;
 
 public class ToyScanner {
     public static void main(String[] args) {

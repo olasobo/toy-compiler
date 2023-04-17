@@ -1,5 +1,4 @@
 package parser;
-import lexer.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,5 +19,15 @@ public class Parameters extends Node {
 
     public void add(Parameter parameter) {
         this.parameters.add(parameter);
+    }
+
+    @Override
+    public String treeString() {
+        String result = "PARAMETERS";
+        for (Parameter parameter : this.parameters) {
+            result += parameter.indentedTree(1);
+        }
+
+        return result;
     }
 }

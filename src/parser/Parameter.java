@@ -10,4 +10,11 @@ public class Parameter extends Node {
         this.type = type;
         this.identifier = identifier;
     }
+
+    @Override
+    public String treeString() {
+        String result = this.type + " " + identifier.getName() + "\n";
+
+        return result;
+    }
 }

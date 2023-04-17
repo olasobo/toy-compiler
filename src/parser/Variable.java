@@ -17,6 +17,11 @@ public class Variable extends Leaf {
         return this.token.toString();
     }
 
+    @Override
+    public String treeString() {
+        return "VARIABLE " + this.getName() + "\n";
+    }
+
     public Variable(Identifier name, Identifier[] path) {
         super(name);
         this.path = path;
@@ -25,5 +30,9 @@ public class Variable extends Leaf {
     public Variable(Identifier name) {
         super(name);
         this.path = null;
+    }
+
+    public String getName() {
+        return ((Identifier) this.token).getName();
     }
 }

@@ -31,6 +31,10 @@ public class Identifier extends Value {
         return super.toString(kind.name() + " " + name, position);
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     public static String parseName(String s) {
         IdState state = IdState.START;
         String value = "";
